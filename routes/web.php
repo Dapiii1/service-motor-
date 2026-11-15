@@ -9,15 +9,20 @@ use App\Models\Kendaraan;
 use App\Models\DaftarService;
 use App\Models\Pembayaran;
 
+// Halaman utama
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect()->route('dashboard');
 });
 
+// Dashboard
 Route::get('/dashboard', function () {
 
     $totalPelanggan = Pelanggan::count();
+
     $totalKendaraan = Kendaraan::count();
+
     $totalService = DaftarService::count();
+
     $totalPembayaran = Pembayaran::count();
 
     $serviceTerbaru = DaftarService::with([
@@ -35,6 +40,7 @@ Route::get('/dashboard', function () {
 
 })->name('dashboard');
 
+// Daftar modul CRUD
 $modules = [
     'pelanggan',
     'kendaraan',
@@ -43,26 +49,44 @@ $modules = [
     'pembayaran',
 ];
 
-Route::get('/{module}', [ServiceMotorController::class, 'index'])
-    ->whereIn('module', $modules)
-    ->name('crud.index');
+// Tampilkan data
+Route::get('/{module}', [
+    ServiceMotorController::class,
+    'index'
+])->whereIn('module', $modules)
+  ->name('crud.index');
 
-Route::get('/{module}/create', [ServiceMotorController::class, 'create'])
-    ->whereIn('module', $modules)
-    ->name('crud.create');
+// Form tambah
+Route::get('/{module}/create', [
+    ServiceMotorController::class,
+    'create'
+])->whereIn('module', $modules)
+  ->name('crud.create');
 
-Route::post('/{module}', [ServiceMotorController::class, 'store'])
-    ->whereIn('module', $modules)
-    ->name('crud.store');
+// Simpan data
+Route::post('/{module}', [
+    ServiceMotorController::class,
+    'store'
+])->whereIn('module', $modules)
+  ->name('crud.store');
 
-Route::get('/{module}/{id}/edit', [ServiceMotorController::class, 'edit'])
-    ->whereIn('module', $modules)
-    ->name('crud.edit');
+// Form edit
+Route::get('/{module}/{id}/edit', [
+    ServiceMotorController::class,
+    'edit'
+])->whereIn('module', $modules)
+  ->name('crud.edit');
 
-Route::put('/{module}/{id}', [ServiceMotorController::class, 'update'])
-    ->whereIn('module', $modules)
-    ->name('crud.update');
+// Update data
+Route::put('/{module}/{id}', [
+    ServiceMotorController::class,
+    'update'
+])->whereIn('module', $modules)
+  ->name('crud.update');
 
-Route::delete('/{module}/{id}', [ServiceMotorController::class, 'destroy'])
-    ->whereIn('module', $modules)
-    ->name('crud.destroy');
+// Hapus data
+Route::delete('/{module}/{id}', [
+    ServiceMotorController::class,
+    'destroy'
+])->whereIn('module', $modules)
+  ->name('crud.destroy');

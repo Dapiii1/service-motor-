@@ -4,6 +4,37 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceMotorController;
 
+use App\Models\Pelanggan;
+use App\Models\Kendaraan;
+use App\Models\DaftarService;
+use App\Models\Pembayaran;
+
+Route::get('/', function () {
+    return redirect('/dashboard');
+});
+
+Route::get('/dashboard', function () {
+
+    $totalPelanggan = Pelanggan::count();
+    $totalKendaraan = Kendaraan::count();
+    $totalService = DaftarService::count();
+    $totalPembayaran = Pembayaran::count();
+
+    $serviceTerbaru = DaftarService::with([
+        'pelanggan',
+        'kendaraan'
+    ])->latest()->take(5)->get();
+
+    return view('dashboard', compact(
+        'totalPelanggan',
+        'totalKendaraan',
+        'totalService',
+        'totalPembayaran',
+        'serviceTerbaru'
+    ));
+
+})->name('dashboard');
+
 $modules = [
     'pelanggan',
     'kendaraan',
@@ -11,8 +42,6 @@ $modules = [
     'data-service',
     'pembayaran',
 ];
-
-Route::redirect('/', '/pelanggan');
 
 Route::get('/{module}', [ServiceMotorController::class, 'index'])
     ->whereIn('module', $modules)

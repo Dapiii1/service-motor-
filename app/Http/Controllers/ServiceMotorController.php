@@ -129,9 +129,10 @@ class ServiceMotorController extends Controller
             ])->toArray(),
 
             'kendaraan_id' => Kendaraan::with('pelanggan')->get()->map(fn($k) => [
-                'value' => $k->id,
-                'label' => $k->no_plat . ' - ' . ($k->pelanggan->nama_lengkap ?? ''),
-            ])->toArray(),
+    'value' => $k->id,
+    'label' => $k->no_plat . ' - ' . ($k->pelanggan->nama_lengkap ?? ''),
+    'pelanggan_id' => $k->pelanggan_id,
+])->toArray(),
 
             'daftar_service_id' => DaftarService::with('kendaraan')->get()->map(fn($s) => [
                 'value' => $s->id,
